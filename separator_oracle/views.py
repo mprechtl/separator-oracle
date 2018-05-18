@@ -17,7 +17,7 @@ def index(request):
     else:
         sessionId = request.COOKIES[session_id_in_cookie]
         secretKeyId = request.COOKIES[secret_key_id_in_cookie]
-        session.checkSession(sessionId, secretKeyId)
+        plain_session_id = session.decryptSession(sessionId, secretKeyId)
 
         # Do something :)
         return JsonResponse({'result': {'message': 'Everything is fine.'}})
