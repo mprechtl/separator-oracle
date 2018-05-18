@@ -11,7 +11,7 @@ def index(request):
     # Check if session id is used
     has_session = session.checkCorrectnessOfSession(request)
 
-    if has_session.hasSession and has_session.correctness:
+    if has_session.hasSession and has_session.correct:
         # Do something :)
         return JsonResponse({'result': {'message': 'Everything is fine.'}})
     else:
