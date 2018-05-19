@@ -30,52 +30,56 @@ class HasSession:
 
 
 def checkCorrectnessOfSession(request):
-    if session_id_in_cookie in request.COOKIES and secret_key_id_in_cookie in request.COOKIES:
-        # extract session id and secret key id from cookie
-        sessionId = request.COOKIES[session_id_in_cookie]
-        secretKeyId = request.COOKIES[secret_key_id_in_cookie]
+    try:
+        if session_id_in_cookie in request.COOKIES and secret_key_id_in_cookie in request.COOKIES:
+            # extract session id and secret key id from cookie
+            sessionId = request.COOKIES[session_id_in_cookie]
+            secretKeyId = request.COOKIES[secret_key_id_in_cookie]
 
-        try:
-            session_to_secret_key_id = ActiveSession.objects.get(
-                secret_key_id=secretKeyId)
-        except ActiveSession.DoesNotExist:
-            return HasSession(True, False, buildWrongSessionError())
+            try:
+                session_to_secret_key_id = ActiveSession.objects.get(
+                    secret_key_id=secretKeyId)
+            except ActiveSession.DoesNotExist:
+                return HasSession(True, False, buildWrongSessionError())
 
-        # check if decryption did work
-        auto_login_cookie = decryptSession(session_to_secret_key_id, sessionId)
-        if auto_login_cookie is None:
-            return HasSession(True, False, buildWrongSessionError())
+            # check if decryption did work
+            auto_login_cookie = decryptSession(
+                session_to_secret_key_id, sessionId)
+            if auto_login_cookie is None:
+                return HasSession(True, False, buildWrongSessionError())
 
-        # check if session attributes are correct; check amount of separators, ...
-        if auto_login_cookie.count(";") != 2:
-            return HasSession(True, False, buildSeparatorError())
-        username, password, valid_until = auto_login_cookie.split(";")
+            # check if session attributes are correct; check amount of separators, ...
+            if auto_login_cookie.count(";") != 2:
+                return HasSession(True, False, buildSeparatorError())
+            username, password, valid_until = auto_login_cookie.split(";")
 
-        # check if date is valid
-        if valid_until.count("-") != 2:
-            return HasSession(True, False, buildUnvalidDateError(), status_code=418)
-        year, month, day = valid_until.split("-")
+            # check if date is valid
+            if valid_until.count("-") != 2:
+                return HasSession(True, False, buildUnvalidDateError(), status_code=418)
+            year, month, day = valid_until.split("-")
 
-        # check if every value is an integer
-        if not isInteger(year) or not isInteger(month) or not isInteger(day):
-            return HasSession(True, False, buildWrongSessionError())
+            # check if every value is an integer
+            if not isInteger(year) or not isInteger(month) or not isInteger(day):
+                return HasSession(True, False, buildWrongSessionError())
 
-        user = session_to_secret_key_id.user
-        today = datetime.date.today()  # maybe replace with datetime
-        valid_until_date = datetime.date(
-            int(year), int(month), int(day))  # maybe add time
+            user = session_to_secret_key_id.user
+            today = datetime.date.today()  # maybe replace with datetime
+            valid_until_date = datetime.date(
+                int(year), int(month), int(day))  # maybe add time
 
-        # Process username, password and valid until
-        correct_username = user.get_username() == username
-        correct_password = user.check_password(password)
-        valid = valid_until_date > today
+            # Process username, password and valid until
+            correct_username = user.get_username() == username
+            correct_password = user.check_password(password)
+            valid = valid_until_date > today
 
-        if correct_username and correct_password and valid:
-            return HasSession(True, True, status_code=200)
+            if correct_username and correct_password and valid:
+                return HasSession(True, True, status_code=200)
+            else:
+                return HasSession(True, False, buildWrongSessionError())
         else:
-            return HasSession(True, False, buildWrongSessionError())
-    else:
-        return HasSession(False, False, buildInvalidSessionError())
+            return HasSession(False, False, buildInvalidSessionError())
+    except:
+        return HasSession(False, False, buildError())
 
 
 # method to check if a string represents an int
