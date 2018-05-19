@@ -34,12 +34,14 @@ def checkCorrectnessOfSession(request):
         sessionId = request.COOKIES[session_id_in_cookie]
         secretKeyId = request.COOKIES[secret_key_id_in_cookie]
 
-        session_to_secret_key_id = ActiveSession.objects.get(
-            secret_key_id=secretKeyId)
-        auto_login_cookie = decryptSession(session_to_secret_key_id, sessionId)
-        print(auto_login_cookie)
+        try:
+            session_to_secret_key_id = ActiveSession.objects.get(
+                secret_key_id=secretKeyId)
+        except ActiveSession.DoesNotExist:
+            return HasSession(True, False, buildWrongSessionError())
 
         # check if decryption did work
+        auto_login_cookie = decryptSession(session_to_secret_key_id, sessionId)
         if auto_login_cookie is None:
             return HasSession(True, False, buildWrongSessionError())
 
@@ -104,8 +106,7 @@ def decryptSession(session, sessionId):
 
 
 def decrypt(cipher_bytes, secret_key, nonce):
-    cipher = AES.new(bytes(secret_key, encoding=utf_8),
-                     AES.MODE_CTR, nonce=bytes(nonce, encoding=utf_8))
+    cipher = AES.new(secret_key, AES.MODE_CTR, nonce=nonce)
     return cipher.decrypt(cipher_bytes)
 
 
