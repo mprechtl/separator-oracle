@@ -17,10 +17,11 @@ latin_1 = 'ISO 8859-1'
 
 class HasSession:
 
-    def __init__(self, hasSession=False, correct=False, error=None):
+    def __init__(self, hasSession=False, correct=False, error=None, status_code=400):
         self.hasSession = hasSession
         self.correct = correct
         self.error = error
+        self.status_code = status_code
 
 
 ########################################################################################
@@ -52,7 +53,7 @@ def checkCorrectnessOfSession(request):
 
         # check if date is valid
         if valid_until.count("-") != 2:
-            return HasSession(True, False, buildUnvalidDateError())
+            return HasSession(True, False, buildUnvalidDateError(), status_code=418)
         year, month, day = valid_until.split("-")
 
         # check if every value is an integer
@@ -70,7 +71,7 @@ def checkCorrectnessOfSession(request):
         valid = valid_until_date > today
 
         if correct_username and correct_password and valid:
-            return HasSession(True, True)
+            return HasSession(True, True, status_code=200)
         else:
             return HasSession(True, False, buildWrongSessionError())
     else:

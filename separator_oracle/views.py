@@ -15,4 +15,4 @@ def index(request):
         # Do something :)
         return JsonResponse({'result': {'message': 'Everything is fine.'}})
     else:
-        return JsonResponse(has_session.error)
+        return JsonResponse(has_session.error, status=has_session.status_code)
