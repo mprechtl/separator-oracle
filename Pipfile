@@ -9,6 +9,7 @@ name = "pypi"
 django = "*"
 django-extensions = "*"
 pycryptodome = "*"
+requests = "*"
 
 [requires]
 python_version = "3.6"
