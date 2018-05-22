@@ -1,0 +1,35 @@
+<h3>Introduction</h3>
+<p>
+    A separator oracle can be used to decrypt a ciphertext which was encrypted with AES in CTR mode. The separator oracle attack
+    is an adaptive chosen ciphertext attack. An attacker sends modified ciphertexts to the oracle. A separator is a special
+    character like ';' or '|'. In our case ';' is used. The separator oracle throws a 'SeparatorException', if not the right
+    amount of separators within the ciphertext/plaintext is used.
+</p>
+
+<p>
+    In our case an auto-login cookie is used. This cookie has a 'session_id' and a 'secret_key_id'. There is already an user
+    active with the Cookie: 'session_id=9gg7PZyI907p2udNpr/aTPjXdEbbpQ==; secret_key_id=HbgMmA3Tum7xW5N6SdpsaWli4AGx83Z7QXIRG6ALrbc='.
+    You already highjacked this session and now you want to determine the username and password. For this purpose, you can
+    use the separator oracle, accessible throug the IP-address of the virtual machine with port 8105!
+</p>
+
+<p>
+    Additional informations are mentioned
+    <a href="https://github.com/mprechtl/separator_oracle">here</a>. Good luck and enjoy it. ;)
+</p>
+
+<h3>Tasks</h3>
+
+{% call task(identifier='username', type='question') %}
+<p>Username within the highjacked session id of a user?</p>
+{{ answer(expected='??????') }}
+{% endcall %}
+
+{% call task(identifier='password', type='question') %}
+<p>Password within the highjacked session id of a user?</p>
+{{ answer(expected='?????') }}
+{% endcall %}
+
+<p>
+    ps: There is also another security issue in the separator oracle, maybe you find it. ;)
+</p>
