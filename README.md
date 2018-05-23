@@ -3,11 +3,13 @@
 
 A separator oracle can be used to decrypt a ciphertext which was encrypted with AES in CTR mode. The separator oracle attack is an adaptive chosen ciphertext attack. An attacker sends modified ciphertexts to the oracle. A `separator` is a special character like `;` or `|`. In our case `;` is used. The separator oracle throws a `SeparatorException`, if not the right amount of separators within the ciphertext/plaintext is used.
 
-In this example, sessions are used. A session contains the username, password and validity which is stored in a cookie, separated by `;` (`username;password;valid`). You don't have to highjack a session, you get the session id and secret key id by executing a script (see below). If the username, password or valid until date is not valid, then an `InvalidSession` error is thrown. A http request looks like this:
+In this example, sessions are used (encoded in Base64). A session contains the username, password and validity which is stored in a cookie, separated by `;` (`username;password;valid`). You don't have to highjack a session, you get the session id and secret key id by executing a script (see below). If the username, password or valid until date is not valid, then an `InvalidSession` error is thrown. A http request looks like this:
 
-**GET** http://localhost:8000/<br/>
-Cookie: session_id=gDamXWzpLTMopToibp/djwvGNfs=;
-secret_key_id=8qTQL6X4CZrvzxF1F4LiGJrYcxDQVDR6PZjRYN1rMdQ=
+```
+GET http://localhost:8000/
+
+Cookie: session_id=gDamXWzpLTMopToibp/djwvGNfs=;secret_key_id=8qTQL6X4CZrvzxF1F4LiGJrYcxDQVDR6PZjRYN1rMdQ=
+```
 
 The response of the separator oracle to a highjacked session should look like this:
 
@@ -30,7 +32,7 @@ That means, that the decryption was successful and you have a valid session id. 
 }
 ```
 
-If you change the amount of the separators, then a `SeparatorException` is thrown:
+If you change the amount of the separators, then a `SeparatorException` is thrown (it is called `ValueError` in our separator oracle):
 
 ```
 {
