@@ -11,12 +11,14 @@ virtualenv separator_oracle/venv
 
 source separator_oracle/venv/bin/activate
 
+# install modules and add active session to database
+pipenv install
+
 # migrate
 ./manage.py makemigrations base
 ./manage.py migrate
 
-# install modules and add active session to database
-pipenv install
+# Add active session to database
 ./manage.py runscript add_active_session --script-args _Username test _Password foobar _Valid 2099-04-04
 
 deactivate
