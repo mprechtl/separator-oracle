@@ -2,7 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import os
-import binascii
+import base64
 
 
 utf_8 = 'utf-8'
@@ -22,8 +22,7 @@ class ActiveSession(models.Model):
         # check if generated secret key id is already used
         # generate a new one if it is already used
         while key_is_used:
-            possible_key_id = binascii.b2a_base64(
-                os.urandom(32), newline=False)
+            possible_key_id = base64.b64encode(os.urandom(32))
             try:
                 ActiveSession.objects.get(secret_key_id=possible_key_id)
             except ActiveSession.DoesNotExist:

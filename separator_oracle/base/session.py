@@ -1,7 +1,7 @@
 
 from Crypto.Cipher import AES
 from separator_oracle.base.models import ActiveSession
-import binascii
+import base64
 import datetime
 import traceback
 
@@ -100,7 +100,7 @@ def decryptSession(session, sessionId):
         # Get nonce and secret key from active session by transmitting secret key id
         nonce = session.nonce
         secret_key = session.secret_key
-        session_id_bytes = binascii.a2b_base64(sessionId)
+        session_id_bytes = base64.b64decode(sessionId)
 
         # decrypt session id
         plain = decrypt(session_id_bytes, secret_key, nonce)

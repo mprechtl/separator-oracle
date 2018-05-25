@@ -3,7 +3,7 @@ from Crypto.Cipher import AES
 from django.contrib.auth.models import User
 from separator_oracle.base.models import ActiveSession
 import os
-import binascii
+import base64
 import traceback
 
 username_key = '_Username'
@@ -69,14 +69,14 @@ def run(*args):
 
     # get bytes of ciphertext and encode it as base64 string
     bytes_of_ciphertext = bytearray(ciphertext)
-    ciphertext_base64 = binascii.b2a_base64(bytes_of_ciphertext, newline=False)
+    ciphertext_base64 = base64.b64encode(bytes_of_ciphertext).decode(utf_8)
 
     try:
         user = saveUser(user_data)
         session = saveSession(user, secret_key, nonce)
 
         # print session id and secret key
-        print('Your session_id : %s' % ciphertext_base64.decode(utf_8))
+        print('Your session_id : %s' % ciphertext_base64)
         print('Your secret_key_id: %s' % session.get_secret_key_id())
     except:
         traceback.print_exc()
