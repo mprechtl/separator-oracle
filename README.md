@@ -68,6 +68,7 @@ cd separator_oracle
 virtualenv separator_oracle/venv
 source separator_oracle/venv/bin/activate
 pipenv install
+./manage.py makemigrations base
 ./manage.py migrate
 ./manage.py runserver
 ```
