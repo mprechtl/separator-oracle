@@ -64,7 +64,7 @@ To install the separator oracle service, you have to follow these steps:
 
 ```
 git clone https://github.com/mprechtl/separator_oracle.git
-cd separator_oracle
+cd separator_oracle/separator_oracle
 virtualenv separator_oracle/venv
 source separator_oracle/venv/bin/activate
 pipenv install
