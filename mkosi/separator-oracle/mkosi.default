@@ -1,0 +1,22 @@
+[Distribution]
+Distribution=debian
+Release=stretch
+
+[Output]
+Format=raw_gpt
+Bootable=yes
+Hostname=separator-oracle
+Output=separator-oracle.raw
+
+[Packages]
+Packages=apt-utils locales iproute2 net-tools python3 python3-pip
+#BuildPackages=
+WithNetwork=yes
+
+[Partitions]
+ESPSize=64M
+RootSize=1000M
+
+[Validation]
+Password=changeme
+

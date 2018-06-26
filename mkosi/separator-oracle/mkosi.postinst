@@ -1,0 +1,23 @@
+#!/bin/bash
+
+chmod 700 /root/.ssh
+chmod 600 /root/.ssh/authorized_keys
+
+systemctl enable systemd-networkd.service
+systemctl enable systemd-resolved.service
+
+useradd --system --no-create-home --home-dir /opt/separator_oracle separator_oracle
+
+# install pipenv
+pip3 install pipenv
+
+# build project
+. /opt/separator_oracle/build.sh
+
+chown -c separator_oracle /opt/separator_oracle 
+
+# enable separator oracle service
+systemctl enable separator-oracle.service
+
+exit 0
+
