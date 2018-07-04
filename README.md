@@ -63,8 +63,8 @@ To run the project you need the following modules/tools:
 To install the separator oracle service, you have to follow these steps:
 
 ```
-git clone https://github.com/mprechtl/separator_oracle.git
-cd separator_oracle/separator_oracle
+git clone https://github.com/mprechtl/separator-oracle.git
+cd separator-oracle/separator_oracle
 virtualenv separator_oracle/venv
 source separator_oracle/venv/bin/activate
 pipenv install
