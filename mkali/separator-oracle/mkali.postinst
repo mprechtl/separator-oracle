@@ -1,0 +1,4 @@
+#!/bin/sh
+adduser -S -H -h /opt/separator-oracle separator-oracle
+. /opt/separator-oracle/build.sh
+rc-update add separator-oracle default

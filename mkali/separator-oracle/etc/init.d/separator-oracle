@@ -1,0 +1,17 @@
+#!/sbin/openrc-run
+command='python3 /opt/separator-oracle/manage.py runserver 0.0.0.0:8000'
+command_args=''
+command_background=1
+command_user='separator-oracle'
+pidfile='/run/separator-oracle.pid'
+
+depend() {
+	need net localmount
+	after bootmisc
+}
+
+start_pre() {
+	checkpath -d -o separator-oracle /opt/separator-oracle
+	find /opt/separator-oracle -type d -exec checkpath -d -o separator-oracle '{}' \;
+	find /opt/separator-oracle -type f -exec checkpath -f -o separator-oracle '{}' \;
+}
