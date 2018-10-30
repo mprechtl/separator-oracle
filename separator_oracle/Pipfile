@@ -6,10 +6,10 @@ name = "pypi"
 [dev-packages]
 
 [packages]
-django = "*"
+django = ">=2.0.8"
 django-extensions = "*"
-pycryptodome = "*"
-requests = "*"
+pycryptodome = ">=3.6.6"
+requests = ">=2.20.0"
 gunicorn = "*"
 
 [requires]
